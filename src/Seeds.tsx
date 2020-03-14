@@ -1,27 +1,26 @@
-import React from "react";
-import axios from "axios";
-import { Button, Card, Table } from "antd";
-import { Switch, Route, Link } from "react-router-dom";
-import { Form, Input } from "antd";
+import React from 'react';
+import axios from 'axios';
+import { Button, Card, Table } from 'antd';
+import { Switch, Route, Link } from 'react-router-dom';
+import { Form, Input } from 'antd';
 
-axios.defaults.headers.common["Authorization"] =
-  "Bearer 8b1fd7e9-c6e1-4e2b-b504-3330cef92f5a";
+axios.defaults.headers.common['Authorization'] = 'Bearer 8b1fd7e9-c6e1-4e2b-b504-3330cef92f5a';
 
 const columns = [
   {
-    title: "Id",
-    dataIndex: "id",
-    key: "id"
+    title: 'Id',
+    dataIndex: 'id',
+    key: 'id'
   },
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name"
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name'
   },
   {
-    title: "User Id",
-    dataIndex: "userId",
-    key: "userId"
+    title: 'User Id',
+    dataIndex: 'userId',
+    key: 'userId'
   }
 ];
 
@@ -42,7 +41,7 @@ export default class Seeds extends React.Component<Props, State> {
   componentDidMount(): void {
     const self = this;
     axios
-      .get("/seeds")
+      .get('/seeds')
       .then(function(response) {
         // handle success
         console.log(response.data);
@@ -64,11 +63,7 @@ export default class Seeds extends React.Component<Props, State> {
           <Route path="/seeds/new">
             <Card title="New Seed">
               <Form name="basic" initialValues={{ remember: true }}>
-                <Form.Item
-                  label="Name"
-                  name="name"
-                  rules={[{ required: true, message: "Required!" }]}
-                >
+                <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Required!' }]}>
                   <Input />
                 </Form.Item>
 
@@ -84,12 +79,7 @@ export default class Seeds extends React.Component<Props, State> {
             <Link to="/seeds/new">
               <Button type="primary">New Seed</Button>
             </Link>
-            <Table
-              dataSource={this.state.data}
-              columns={columns}
-              rowKey="id"
-              sortDirections={["ascend", "descend"]}
-            />
+            <Table dataSource={this.state.data} columns={columns} rowKey="id" sortDirections={['ascend', 'descend']} />
           </Route>
         </Switch>
       </>

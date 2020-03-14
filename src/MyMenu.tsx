@@ -1,7 +1,7 @@
-import React from "react";
-import { Menu } from "antd";
-import { withRouter } from "react-router-dom";
-import { ClickParam } from "antd/lib/menu";
+import React from 'react';
+import { Menu } from 'antd';
+import { withRouter } from 'react-router-dom';
+import { ClickParam } from 'antd/lib/menu';
 
 interface Props {
   history: any;
@@ -17,12 +17,7 @@ class MyMenu extends React.Component<Props> {
 
   render() {
     return (
-      <Menu
-        theme="light"
-        defaultSelectedKeys={["1"]}
-        mode="inline"
-        onClick={this.handleClick}
-      >
+      <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" onClick={this.handleClick}>
         <Menu.Item key="/">
           <span>Home</span>
         </Menu.Item>
