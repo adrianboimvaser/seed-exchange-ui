@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import './App.css';
 import Seeds from './Seeds';
 import 'antd/dist/antd.css';
 import { BrowserRouter as Router, Switch, Route, useParams } from 'react-router-dom';
 import { Button, Layout } from 'antd';
 import MyMenu from './MyMenu';
+import GoogleMapReact from 'google-map-react';
+import Place from './Place';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -21,6 +23,17 @@ function App() {
 
   const logOut = () => {
     setLoggedIn(false);
+  };
+
+  const handleApiLoaded = (map: any, maps: any) => {};
+
+  const center = {
+    lat: -31.7337458,
+    lng: -60.4776291
+  };
+
+  const onChange = (center, zoom, bounds, marginBounds) => {
+    console.log('onBoundsChange', center, zoom, bounds, marginBounds);
   };
 
   return (
@@ -42,7 +55,20 @@ function App() {
                     <div>Profile</div>
                   </Route>
                   <Route path="/">
-                    <div>HOME</div>
+                    <div style={{ width: 800, height: 400 }}>
+                      <GoogleMapReact
+                        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
+                        defaultCenter={center}
+                        defaultZoom={15}
+                        yesIWantToUseGoogleMapApiInternals
+                        onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                        onChange={onChange}
+                      >
+                        <Place lat={-31.7337458} lng={-60.4776291}>
+                          HELLO
+                        </Place>
+                      </GoogleMapReact>
+                    </div>
                   </Route>
                 </Switch>
               </Content>
@@ -50,7 +76,9 @@ function App() {
           ) : (
             <Layout>
               <Content>
-                <Button type="primary" onClick={logIn}>LOG IN!</Button>
+                <Button type="primary" onClick={logIn}>
+                  LOG IN!
+                </Button>
               </Content>
             </Layout>
           )}
