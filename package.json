@@ -13,12 +13,16 @@
     "@types/react-dom": "^16.9.5",
     "antd": "^4.0.2",
     "axios": "^0.19.2",
+    "formik": "^2.1.4",
+    "formik-antd": "^2.0.0",
+    "google-map-react": "^1.1.7",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-intl": "^4.1.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "yup": "^0.28.3"
   },
   "scripts": {
     "start": "react-scripts start",

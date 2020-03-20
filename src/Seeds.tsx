@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Card, Table } from 'antd';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route, Link, withRouter, RouterProps } from 'react-router-dom';
 import { Form, Input } from 'antd';
 
 axios.defaults.headers.common['Authorization'] = 'Bearer 8b1fd7e9-c6e1-4e2b-b504-3330cef92f5a';
@@ -24,14 +24,19 @@ const columns = [
   }
 ];
 
-interface Props {}
+interface Props extends RouterProps {
+  match: any;
+  location: any;
+  history: any;
+}
 
 interface State {
   data: any[];
 }
 
-export default class Seeds extends React.Component<Props, State> {
+class Seeds extends React.Component<Props, State> {
   constructor(props: Props) {
+    console.log('props', props);
     super(props);
     this.state = {
       data: []
@@ -57,10 +62,13 @@ export default class Seeds extends React.Component<Props, State> {
   }
 
   render() {
+
+    console.log('username', this.props.match.params.username);
+
     return (
       <>
         <Switch>
-          <Route path="/seeds/new">
+          <Route path="/:username/seeds/new">
             <Card title="New Seed">
               <Form name="basic" initialValues={{ remember: true }}>
                 <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Required!' }]}>
@@ -75,8 +83,8 @@ export default class Seeds extends React.Component<Props, State> {
               </Form>
             </Card>
           </Route>
-          <Route path="/seeds">
-            <Link to="/seeds/new">
+          <Route path="/">
+            <Link to="seeds/new">
               <Button type="primary">New Seed</Button>
             </Link>
             <Table dataSource={this.state.data} columns={columns} rowKey="id" sortDirections={['ascend', 'descend']} />
@@ -86,3 +94,5 @@ export default class Seeds extends React.Component<Props, State> {
     );
   }
 }
+
+export default withRouter(Seeds);

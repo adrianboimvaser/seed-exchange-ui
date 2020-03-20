@@ -21,7 +21,7 @@ class MyMenu extends React.Component<Props> {
         <Menu.Item key="/">
           <span>Home</span>
         </Menu.Item>
-        <Menu.Item key="/seeds">
+        <Menu.Item key="/adrianboimvaser/seeds">
           <span>Seeds</span>
         </Menu.Item>
       </Menu>
