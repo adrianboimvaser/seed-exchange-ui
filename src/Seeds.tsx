@@ -46,7 +46,7 @@ class Seeds extends React.Component<Props, State> {
   componentDidMount(): void {
     const self = this;
     axios
-      .get('/seeds')
+      .get(process.env.REACT_APP_API_URL + '/seeds')
       .then(function(response) {
         // handle success
         console.log(response.data);
