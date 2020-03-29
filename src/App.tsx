@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import './App.css';
 import Seeds from './Seeds';
 import 'antd/dist/antd.css';
@@ -7,6 +7,7 @@ import { Button, Layout } from 'antd';
 import MyMenu from './MyMenu';
 import GoogleMapReact from 'google-map-react';
 import Place from './Place';
+import axios from 'axios';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -15,14 +16,71 @@ function SecurityLayout() {
 }
 
 function App() {
+  new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    });
+  })
+    .then((location: Position) => console.log('location', location.coords))
+    .catch(error => console.log('error', error));
+
   const [loggedIn, setLoggedIn] = useState(false);
+  const [me, setMe] = useState(null);
+
+  useEffect(() => {
+    window.fbPromise.then(() => {
+      console.log('FB.init', process.env.REACT_APP_FACEBOOK_APP_ID);
+
+      FB.init({
+        appId: process.env.REACT_APP_FACEBOOK_APP_ID,
+        cookie: true,
+        xfbml: true,
+        version: 'v6.0'
+      });
+      FB.getLoginStatus(response => {
+        console.log('FB.getLoginStatus', response);
+        if (response.status === 'connected') {
+          axios
+            .post(process.env.REACT_APP_API_URL + '/auth/login', { accessToken: response.authResponse.accessToken })
+            .then(function(response) {
+              // handle success
+              console.log(response);
+            })
+            .catch(function(error) {
+              // handle error
+              console.log(error);
+            })
+            .then(function() {
+              // always executed
+            });
+          setLoggedIn(true);
+        }
+      });
+    });
+  }, []);
 
   const logIn = () => {
-    setLoggedIn(true);
+    FB.login(response => {
+      console.log('FB.login', response);
+      if (response.status === 'connected') {
+        setLoggedIn(true);
+        FB.api('/me', { fields: 'id, name, email, picture' }, function(me: any) {
+          if (me) {
+            setMe(me);
+          }
+        });
+      }
+    });
   };
 
   const logOut = () => {
-    setLoggedIn(false);
+    FB.logout(response => {
+      if (response.status === 'unknown') {
+        setLoggedIn(false);
+      }
+    });
   };
 
   const handleApiLoaded = (map: any, maps: any) => {};
@@ -39,7 +97,15 @@ function App() {
   return (
     <Router>
       <Layout>
-        <Header>{loggedIn && <Button onClick={logOut}>LOG OUT</Button>}</Header>
+        <Header>
+          {loggedIn && <Button onClick={logOut}>LOG OUT</Button>}
+          {me && (
+            <>
+              <span>{me.name}</span>
+              <img src={me.picture.data.url} />
+            </>
+          )}
+        </Header>
         <Content>
           {loggedIn ? (
             <Layout>
